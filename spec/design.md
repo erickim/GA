@@ -1,5 +1,6 @@
 # Stat 243 Final Project: Genetic Algorithms Design Doc
 
+## `select`
 The main function is `select(...)` located in the `select.R` file.
 
 It will take arguments
@@ -13,3 +14,18 @@ It will take arguments
 * `mutation` - the mutation rate.
 * `P` - the population size.
 * `seed` - the seed to start the process, defaulted at `1`.
+
+## `initialize`
+There should be a function to initialize the algorithm.
+
+It will take arguments as follows that were passed into `select`
+* `P` - the population size.
+
+## `crossover`
+There should be a function to implement crossover.
+
+
+It will take in arguments
+* `type` - either `simple` as described in page 77 of Givens/Hoeting or `tournament` as descibed in page 81 of Givens/Hoeting.
+* `parent1` and `parent2` - two candidate solutions.
+
