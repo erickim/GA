@@ -38,8 +38,15 @@ It will take arguments:
 * `rate` - the mutation rate passed into `select`.
 
 ## `selection`
-There should be a function to implement selection at each stage. It will call `crossover` and `mutation`
+There should be a function to implement selection and update the candidate solutions at each stage. It will call `crossover` and `mutation`.
 
-It will take arguments
+It will take arguments:
+* `type` - either `'simple'` as described in Page 76 of Givens/Hoeting or `'tournament'` as described in Page 81 of Givens/Hoeting.
+* `parents` - all the candidate solutions
+* ???
 
 ## `optimize`
+This will be an iterative function that continues until convergence.
+
+It will take arguments;
+* ???
