@@ -3,7 +3,7 @@
 ## `select`
 The main function is `select(...)` located in the `select.R` file.
 
-It will take arguments
+It will take arguments:
 * `data` - the data, should be of class `data.frame`.
 * `formula` - the formula, should be of class `formula`.
 * `family` - the type of regression, a string of `'lm'`, `'glm'`, and perhaps `'glmnet'`.
@@ -25,7 +25,21 @@ It will take arguments as follows that were passed into `select`
 There should be a function to implement crossover.
 
 
-It will take in arguments
-* `type` - either `simple` as described in page 77 of Givens/Hoeting or `tournament` as descibed in page 81 of Givens/Hoeting.
+It will take arguments:
+* `type` - see page 77 of Givens/Hoeting.
 * `parent1` and `parent2` - two candidate solutions.
+* `rate` - the crossover rate passed into `select`.
 
+## `mutation`
+There should be a function ot implement mutation after crossover.
+
+It will take arguments:
+* `offspring` - an output from `crossover`.
+* `rate` - the mutation rate passed into `select`.
+
+## `selection`
+There should be a function to implement selection at each stage. It will call `crossover` and `mutation`
+
+It will take arguments
+
+## `optimize`
