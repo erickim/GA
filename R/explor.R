@@ -21,9 +21,9 @@ crossoverMultiple <- crossover(init_pop[[1]]$variables,
                                "multiple",
                                3)
 #$child1
-#[1] 1 1 0 1 0 0 1 1 1 0 1 1 0 1 1 1 0 1 0 0 1 1 1 0 1
+#[1] 0 1 1 0 1 0 0 1 1 1 0 1 1 0 1 1 1 0 1 0 0 1 1 1 0 1
 #$child2
-#[1] 1 1 1 1 1 0 0 0 1 0 0 1 0 1 0 0 1 0 1 0 0 0 1 1 0
+#[1] 1 1 1 1 1 1 0 0 0 1 0 0 1 0 1 0 0 1 0 1 0 0 0 1 1 0
 
 
 # ignore below

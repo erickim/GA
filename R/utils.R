@@ -79,7 +79,7 @@ crossover <- function(parent1,
     child1 <- c()
     child2 <- c()
     
-    for (i in 1:num_splits + 1) {
+    for (i in 1:(num_splits + 1)) {
       if (i %% 2 == 1) {
         child1 <- c(child1, parent1Split[[i]])
         child2 <- c(child2, parent2Split[[i]])
