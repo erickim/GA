@@ -44,9 +44,11 @@ crossover <- function(parent1,
   #' Genetic Algorithms Crossover Operation
   #'
   #' Arguments:
+  #' @param parent1 The first candidate solution (a vector of 0's and 1's).
+  #' @param parent2 The second candidate solution (a vector of 0's and 1's).
   #' @param type The type of crossover, either "single" or "multiple".
-  #' @param parent1 The \code{variables} output from a parent.
-  #' @param parent2 The \code{variables} output from another parent.
+  #' @param num_splits The number of splits for type multiple.
+  #' If invalid \code{num_splits} specified, then will default to 2.
   #'  
   #' @return A list of vectors of the children to return.
   
@@ -102,12 +104,12 @@ crossover <- function(parent1,
   return(children)
 }
 
-mutate <- function(rate, candidate) {
+mutate <- function(rate, offspring) {
   #' Genetic Algorithms Mutation Operation
   #'
   #' Arguments:
-  #' @param type The type of crossover, either "single" or "multiple".
-  #' @param candidate The candidate solution (a vector of 0's and 1's)
+  #' @param rate The rate of mutation.
+  #' @param offspring The candidate solution (a vector of 0's and 1's)
   #' to potentially mutate.
   #'  
   #' @return The mutated or unmutated candidate.
@@ -123,8 +125,8 @@ mutate <- function(rate, candidate) {
     
     # if it's a 0, change it to a 1
     # if it's a 1, change it to a 0
-    candidate <- (candidate[mutatePos] + 1) %% 2
+    offspring <- (offspring[mutatePos] + 1) %% 2
   }
   
-  return(candidate)
+  return(offspring)
 }

@@ -5,12 +5,12 @@ The main function is `select(...)` located in the `select.R` file.
 
 It will take arguments:
 * `data` - the data, should be of class `data.frame`.
-* `formula` - the formula, should be of class `formula`.
-* `family` - the type of regression, a string of `'lm'`, `'glm'`, and perhaps `'glmnet'`.
+* `reg_type` - the type of regression, a string of `'lm'`, `'glm'`, and perhaps `'glmnet'`.
+* `family` - the family to be passed into `'glm'` or perhaps `'glmnet'`.
 * `objective` - the objective function default `AIC` but can also allow for user implemented functions.
 * `fitness` - similar to `objective` but can be different, see Givens/Hoeting for details.
 * `selection` - the selection mechanism, probably a string, see Givens/Hoeting for details.
-* `crossover` - the crossover rate.
+* `crossover` - the crossover type.
 * `mutation` - the mutation rate.
 * `P` - the population size.
 * `seed` - the seed to start the process, defaulted at `1`.
@@ -19,18 +19,19 @@ It will take arguments:
 There should be a function to initialize the algorithm.
 
 It will take arguments as follows that were passed into `select`
+* `Y` - the response vector.
+* `X` - the feature matrix
 * `P` - the population size.
 
 ## `crossover`
 There should be a function to implement crossover.
 
-
 It will take arguments:
-* `type` - see page 77 of Givens/Hoeting.
-* `parent1` and `parent2` - two candidate solutions.
-* `rate` - the crossover rate passed into `select`.
+* `parent1` and `parent2` - two candidate solutions (a vector of 0's and 1's).
+* `type` - see page 77 of Givens/Hoeting (either `single` or `multiple`)
+* `num_splits` - if `type` was multiple, then the user supplied number of splits. Will default to 2 if invalid `num_splits` passed.
 
-## `mutation`
+## `mutate`
 There should be a function ot implement mutation after crossover.
 
 It will take arguments:
