@@ -63,7 +63,10 @@ crossover <- function(parent1,
     child2 <- c(parent2[1:split], parent1[(split+1):N])
   } else if (type == "multiple") {
     # if invalid num_splits supplied, set default 2
-    if (num_splits < 2 | is.na(num_splits)) num_splits = 2
+    if (num_splits < 2 | is.na(num_splits)) {
+      message('Invalid `num_splits` provided, defaulting to 2.')
+      num_splits = 2
+    }
     
     # find the places to split
     splits <- sort(sample(N, num_splits))
@@ -114,7 +117,7 @@ mutate <- function(rate, offspring) {
   #'  
   #' @return The mutated or unmutated candidate.
   
-  N <- length(candidate)
+  N <- length(offspring)
   
   # sample from a bernoulli(rate).
   # equals 1 if mutation will occur 0 otherwise
@@ -129,4 +132,51 @@ mutate <- function(rate, offspring) {
   }
   
   return(offspring)
+}
+
+selection <- function(type, pop_fitness) {
+  #' Genetic Algorithms Selection Operation
+  #'
+  #' Arguments:
+  #' @param type The type of selection mechanism. Either \code{'oneprop'},
+  #' \code{'twoprop'}. See page 76 and 81 of G/H.
+  #' @param pop_fitness A vector of fitness values for the population
+  #'  
+  #' @return The mutated or unmutated candidate.
+  
+  if (!type %in% c('oneprop', 'twoprop', 'tournament')) {
+    message('Invalid selection mechanism, defaulting to `twoprop`.')
+    type <- 'twoprop'
+  }
+  
+  N <- length(pop_fitness)
+  fitnessProbs <- pop_fitness / sum(pop_fitness)
+  
+  if (type == 'oneprop') {
+    # pick first proportional to fitness
+    toSelect <- sample(1:N, 1, prob = fitnessProbs)
+    # pick second parent at random from the remaining
+    toSelect <- c(toSelect,
+                  sample((1:N)[-toSelect], 1))
+    
+  } else if (type == 'twoprop') {
+    toSelect <- sample(1:N, 2, prob = fitnessProbs)
+  }
+  
+  return(toSelect)
+  
+}
+
+selection_tournament <- function(pop_fitness, k, G) {
+  #' Genetic Algorithms Tournament Selection Operation
+  #' See Page 81 of G/H.
+  #'
+  #' Arguments:
+  #' @param pop_fitness A vector of fitness values for the population
+  #' @param k The number of subsets
+  #' @param G The proportion of offspring to be replaced by generated offspring
+  #'  
+  #' @return The mutated or unmutated candidate.
+   
+  # unimplemented
 }

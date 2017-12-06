@@ -9,18 +9,18 @@ names(X) <- letters
 P <- ncol(X)*2
 
 ### EXAMPLES: INITIALIZE ###
-init_pop <- initialize(Y, X, P)
+initPop <- initialize(Y, X, P)
 
 ### EXAMPLES: CROSSOVER ###
-crossoverSingle <- crossover(init_pop[[1]]$variables,
-                             init_pop[[2]]$variables,
+crossoverSingle <- crossover(initPop[[1]]$variables,
+                             initPop[[2]]$variables,
                              "single")
 # $child1
 # [1] 0 1 1 1 1 1 0 0 0 1 0 1 1 0 1 0 0 0 1 0 0 1 1 1 0 1
 # $child2
 # [1] 1 1 1 0 1 0 0 1 1 1 0 0 1 0 1 1 1 1 0 1 0 0 0 1 1 0
-crossoverMultiple <- crossover(init_pop[[1]]$variables,
-                               init_pop[[2]]$variables,
+crossoverMultiple <- crossover(initPop[[1]]$variables,
+                               initPop[[2]]$variables,
                                "multiple",
                                3)
 # $child1
@@ -29,7 +29,19 @@ crossoverMultiple <- crossover(init_pop[[1]]$variables,
 # [1] 1 1 1 1 1 1 0 0 0 1 0 0 1 0 1 0 0 1 0 1 0 0 0 1 1 0
 
 ### EXAMPLES: MUTATION ###
+crossoverSingleMutation <- mutate(rate = .05,
+                                  offspring = crossoverSingle$child1)
+# [1] 0 1 1 1 1 1 0 0 0 1 0 1 1 0 1 0 0 0 1 0 0 1 1 1 0 1
 
+### EXAMPLES: SELECTION ###
+initPopAIC <- unlist(lapply(initPop, function(x) AIC(x$fit)))
+selection('oneprop', initPopAIC)
+# 8 7
+selection('twoprop', initPopAIC)
+# 34, 11
+
+### EXAMPLES: TOURNAMENT SELECTION ###
+# unimplemented, do later 
 
 # ignore below
 #xaic <- lapply(x, AIC)
