@@ -53,14 +53,20 @@ crossover <- function(parent1,
   N <- length(parent1)
   
   if (type == "single"){
+    # find where to split
     split <- sample(N, 1)
     
+    # create the new children
     child1 <- c(parent1[1:split], parent2[(split+1):N])
     child2 <- c(parent2[1:split], parent1[(split+1):N])
   } else if (type == "multiple") {
+    # if invalid num_splits supplied, set default 2
     if (num_splits < 2 | is.na(num_splits)) num_splits = 2
     
+    # find the places to split
     splits <- sort(sample(N, num_splits))
+    
+    # create empty list of splits of parents
     parent1Split <- list()
     parent2Split <- list()
     
@@ -76,9 +82,11 @@ crossover <- function(parent1,
     parent1Split[[num_splits + 1]] <- parent1[(splits[num_splits] + 1):N]
     parent2Split[[num_splits + 1]] <- parent2[(splits[num_splits] + 1):N]
     
+    # create empty children vectors
     child1 <- c()
     child2 <- c()
     
+    # alternate parent splits and append to children vectors
     for (i in 1:(num_splits + 1)) {
       if (i %% 2 == 1) {
         child1 <- c(child1, parent1Split[[i]])
@@ -92,4 +100,31 @@ crossover <- function(parent1,
   
   children <- list(child1 = child1, child2 = child2)
   return(children)
+}
+
+mutate <- function(rate, candidate) {
+  #' Genetic Algorithms Mutation Operation
+  #'
+  #' Arguments:
+  #' @param type The type of crossover, either "single" or "multiple".
+  #' @param candidate The candidate solution (a vector of 0's and 1's)
+  #' to potentially mutate.
+  #'  
+  #' @return The mutated or unmutated candidate.
+  
+  N <- length(candidate)
+  
+  # sample from a bernoulli(rate).
+  # equals 1 if mutation will occur 0 otherwise
+  mutateCond <- rbinom(1, 1, rate)
+  
+  if (mutateCond) {
+    mutatePos <- sample(N, 1)
+    
+    # if it's a 0, change it to a 1
+    # if it's a 1, change it to a 0
+    candidate <- (candidate[mutatePos] + 1) %% 2
+  }
+  
+  return(candidate)
 }
