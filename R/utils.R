@@ -11,13 +11,14 @@ library(docstring)
 ### a .Rd file yet, but it should work with ?... to access the docstrings
 ### from the global environment.
 
-initialize <- function(Y, X, P) {
+initialize <- function(Y, X, P, seed) {
   #' Genetic Algorithms Initial Population Creation
   #'
   #' Arguments:
   #' @param Y The response vector as passed into select.
   #' @param X The feature matrix as passed into select.
   #' @param P The size of the population as passed or determined in select.
+  #' @param seed The seed for reproducibility.
   #'  
   #' @return A list of the P generated candidate solutions
   #' where each entry of the list contains
@@ -28,9 +29,15 @@ initialize <- function(Y, X, P) {
   #' above variables.
   #' }
   
+  set.seed(seed)
+  
   init_pop <- lapply(1:P, function(x) {
     init_var <- rbinom(ncol(X), 1, .5)
-    init_sol <- lm(Y ~ ., data = X[,as.logical(init_var)])
+    if (sum(init_var) == 0) {
+      init_sol <- lm(Y ~ 1)
+    } else {
+      init_sol <- lm(Y ~ ., data = X[,as.logical(init_var), drop = FALSE])
+    }
     return(list(variables = init_var, fit = init_sol))
     })
   
@@ -59,8 +66,13 @@ crossover <- function(parent1,
     split <- sample(N, 1)
     
     # create the new children
-    child1 <- c(parent1[1:split], parent2[(split+1):N])
-    child2 <- c(parent2[1:split], parent1[(split+1):N])
+    if (split == N) {
+      child1 <- parent2
+      child2 <- parent1
+    } else{
+      child1 <- c(parent1[1:split], parent2[(split+1):N])
+      child2 <- c(parent2[1:split], parent1[(split+1):N])
+    }
   } else if (type == "multiple") {
     # if invalid num_splits supplied, set default 2
     if (num_splits < 2 | is.na(num_splits)) {
@@ -117,19 +129,14 @@ mutate <- function(rate, offspring) {
   #'  
   #' @return The mutated or unmutated candidate.
   
-  N <- length(offspring)
+  P <- length(offspring)
   
   # sample from a bernoulli(rate).
   # equals 1 if mutation will occur 0 otherwise
-  mutateCond <- rbinom(1, 1, rate)
+  mutatePos <- rbinom(P, 1, rate)
   
-  if (mutateCond) {
-    mutatePos <- sample(N, 1)
-    
-    # if it's a 0, change it to a 1
-    # if it's a 1, change it to a 0
-    offspring <- (offspring[mutatePos] + 1) %% 2
-  }
+  offspring[as.logical(mutatePos)] <-
+    (offspring[as.logical(mutatePos)] + 1) %% 2
   
   return(offspring)
 }
@@ -149,18 +156,18 @@ selection <- function(type, pop_fitness) {
     type <- 'twoprop'
   }
   
-  N <- length(pop_fitness)
+  P <- length(pop_fitness)
   fitnessProbs <- pop_fitness / sum(pop_fitness)
   
   if (type == 'oneprop') {
     # pick first proportional to fitness
-    toSelect <- sample(1:N, 1, prob = fitnessProbs)
+    toSelect <- sample(1:P, 1, prob = fitnessProbs)
     # pick second parent at random from the remaining
     toSelect <- c(toSelect,
-                  sample((1:N)[-toSelect], 1))
+                  sample((1:P)[-toSelect], 1))
     
   } else if (type == 'twoprop') {
-    toSelect <- sample(1:N, 2, prob = fitnessProbs)
+    toSelect <- sample(1:P, 2, prob = fitnessProbs)
   }
   
   return(toSelect)
@@ -177,6 +184,39 @@ selection_tournament <- function(pop_fitness, k, G) {
   #' @param G The proportion of offspring to be replaced by generated offspring
   #'  
   #' @return The mutated or unmutated candidate.
-   
+  
   # unimplemented
+}
+
+fitnessRanks <- function(fitness) {
+  #' Genetic Algorithms Fitness Rank Operation
+  #' See Page 80 of G/H.
+  #'
+  #' Arguments:
+  #' @param fitness
+  #'  
+  #' @return 
+  
+  P <- length(fitness)
+  fitnessRanks <- rank(fitness)
+  
+  newFitness <- 2*fitnessRanks / (P * (P+1))
+  
+  return(newFitness)
+}
+
+regFunc <- function(regType, family, formula, data) {
+  if (!regType %in% c("lm", "glm")) {
+    message("Invalid `regType` defaulting to `lm`.")
+    regType = "lm"
+  }
+  
+  if (!family %in% c("binomial", "gaussian", "Gamma",
+                     "inverse.gaussian", "poisson", "quasi",
+                     "quasibinomial", "quasipoisson")) {
+    message("Invalid `family` defaulting to `gaussian`.")
+  }
+  
+  if (regType == "lm") return(lm(formula, data = data))
+  if (regType == "glm") return(glm(formula, family = family, data = data))
 }

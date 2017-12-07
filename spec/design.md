@@ -42,13 +42,7 @@ It will take arguments:
 There should be a function to implement selection and update the candidate solutions at each stage. It will call `crossover` and `mutation`.
 
 It will take arguments:
-* `type` - either `'simple'` as described in Page 76 of Givens/Hoeting or `'tournament'` as described in Page 81 of Givens/Hoeting.
-* `parents` - all the candidate solutions
-* ???
+* `type` - either `'oneprop'` or `'twoprop'` as described in Page 76 of Givens/Hoeting
+* `pop_fitness` - the candidate fitness scores
 
-## `optimize`
-This will be an iterative function that continues until convergence.
-
-It will take arguments;
-* ???
 
