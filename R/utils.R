@@ -11,13 +11,15 @@ library(docstring)
 ### a .Rd file yet, but it should work with ?... to access the docstrings
 ### from the global environment.
 
-initialize <- function(Y, X, P, seed) {
+initialize <- function(Y, X, P, regType, family, seed) {
   #' Genetic Algorithms Initial Population Creation
   #'
   #' Arguments:
   #' @param Y The response vector as passed into select.
   #' @param X The feature matrix as passed into select.
   #' @param P The size of the population as passed or determined in select.
+  #' @param regType The type of regression, either "lm" or "glm".
+  #' @param family The family for "glm".
   #' @param seed The seed for reproducibility.
   #'  
   #' @return A list of the P generated candidate solutions
@@ -32,12 +34,11 @@ initialize <- function(Y, X, P, seed) {
   set.seed(seed)
   
   init_pop <- lapply(1:P, function(x) {
-    init_var <- rbinom(ncol(X), 1, .5)
-    if (sum(init_var) == 0) {
-      init_sol <- lm(Y ~ 1)
-    } else {
-      init_sol <- lm(Y ~ ., data = X[,as.logical(init_var), drop = FALSE])
-    }
+  init_var <- rbinom(ncol(X), 1, .5)
+  init_sol <- regFunc(regType,
+                      family,
+                      Y ~ .,
+                      data = X[,as.logical(init_var), drop = FALSE])
     return(list(variables = init_var, fit = init_sol))
     })
   
@@ -217,6 +218,13 @@ regFunc <- function(regType, family, formula, data) {
     message("Invalid `family` defaulting to `gaussian`.")
   }
   
-  if (regType == "lm") return(lm(formula, data = data))
-  if (regType == "glm") return(glm(formula, family = family, data = data))
+  if (regType == "lm" & ncol(data) == 0) {
+    return(lm(formula))
+  } else if (regType == "lm" & ncol(data) > 0) {
+    return(lm(formula, data))
+  } else if (regType == "glm" & ncol(data) == 0) {
+    return(glm(formula, family))
+  } else if (regType == "glm" & ncol(data) > 0) {
+    return(glm(formula, family, data))
+  }
 }

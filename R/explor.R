@@ -1,7 +1,7 @@
 source("./R/select.R")
 
 ### EXAMPLES: DATA GENERATION ###
-regType = 'lm'
+regType = 'glm'
 family = 'gaussian'
 fitness = "AIC"
 ranked = TRUE
@@ -40,7 +40,6 @@ min(testBestAIC) # best subsets
 testGASelect$variables
 testBestWhich[which.min(testBestAIC),]
 
-
 ### BEST SUBSETS VS GA WITH `swiss` ###
 # best subsets
 swissBest <- regsubsets(Fertility ~ ., data = swiss, nvmax = 5)
@@ -58,7 +57,6 @@ swissGASelect <- select(swiss$Fertility, swiss[,-1])
 
 AIC(swissGASelect$fit)
 min(swissBestAIC)
-
 
 
 ##### MODULAR EXAMPLES #####

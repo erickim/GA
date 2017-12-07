@@ -20,7 +20,7 @@ select <- function(Y,
                    seed = 1) {
   source('./R/utils.R')
   
-  initPop <- initialize(Y, X, P, seed)
+  initPop <- initialize(Y, X, P, regType, family, seed)
   
   currIter <- 1
   currPop <- initPop
