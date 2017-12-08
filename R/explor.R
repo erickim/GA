@@ -27,18 +27,18 @@ testBestWhich <- summary(testBest)$which
 testBestAIC <- c()
 for (i in 1:26) {
   testBestAIC <- c(testBestAIC,
-                   AIC(lm(Y ~ .,
+                   AIC(glm(Y ~ .,
                           data = X[testBestWhich[i,-1]])))
 }
 
-testGASelect <- select(Y, X)
+testGASelect <- select(Y, X, regType = "glm")
 
 # optimized AIC
 -1*testGASelect$fitness # GA
 min(testBestAIC) # best subsets
-# fit
-testGASelect$variables
-testBestWhich[which.min(testBestAIC),]
+# fit (same)
+which(testGASelect$variables == 1)
+which(testBestWhich[which.min(testBestAIC),-1])
 
 ### BEST SUBSETS VS GA WITH `swiss` ###
 # best subsets
@@ -48,15 +48,22 @@ swissBestAIC <- c()
 
 for (i in 1:5) {
   swissBestAIC <- c(swissBestAIC,
-                    AIC(lm(Fertility ~ .,
+                    AIC(glm(Fertility ~ .,
                            data = swiss[c(TRUE,
                                           swissBestWhich[i,-1])])))
 }
 
-swissGASelect <- select(swiss$Fertility, swiss[,-1])
+swissGASelect <- select(swiss$Fertility, swiss[,-1], regType = "glm")
 
-AIC(swissGASelect$fit)
-min(swissBestAIC)
+# optimized AIC
+-1*swissGASelect$fitness # GA
+min(swissBestAIC) # best subsets
+# fit (same)
+which(swissGASelect$variables == 1)
+which(swissBestWhich[which.min(swissBestAIC),-1])
+
+
+
 
 
 ##### MODULAR EXAMPLES #####
