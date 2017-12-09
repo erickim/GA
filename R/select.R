@@ -68,8 +68,7 @@ select <- function(Y,
                                         Y ~ .,
                                         X[,as.logical(child2), drop = FALSE]))
       i <- i + 1
-      # in case P is odd
-      #if(i == P) break
+
     }
     
     currIter <- currIter + 1
