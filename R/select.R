@@ -9,16 +9,16 @@ select <- function(Y,
                    regType = 'lm',
                    family = 'gaussian',
                    fitness = "AIC",
-                   ranked = TRUE,
-                   selectionType = "twoprop",
+                   ranked = TRUE, 
+                   selectionType = "twoprop", 
                    elitism = TRUE,
-                   crossoverType = "single",
+                   crossoverType = "single", 
                    numCrossover = NA,
-                   mutationRate = .01,
-                   maxIter = 100,
-                   P = 2 * ncol(X),
+                   mutationRate = .01, 
+                   maxIter = 100, 
+                   P = 2 * ncol(X), 
                    seed = 1) {
-  source('./R/utils.R')
+  source('utils.R')
   
   initPop <- initialize(Y, X, P, regType, family, seed)
   
@@ -28,6 +28,7 @@ select <- function(Y,
     fitness <- function(x) -1*AIC(x)
     fitnessType <- "Negative AIC"
   } else {
+    
     fitnessType <- "User Supplied"
   }
   
@@ -38,6 +39,8 @@ select <- function(Y,
     
     i = 1
     newPop <- list()
+    
+    ## consider generation gap: G = (p-1)/p
     if(elitism) {
       newPop[[1]] <- currPop[[which.max(currFitness)]]
       i = 2
@@ -56,6 +59,8 @@ select <- function(Y,
                                         family,
                                         Y ~ .,
                                         X[,as.logical(child1), drop = FALSE]))
+      
+      if(i == P) break
       i <- i + 1
       newPop[[i]] <- list(variables = child2,
                           fit = regFunc(regType,
@@ -64,7 +69,7 @@ select <- function(Y,
                                         X[,as.logical(child2), drop = FALSE]))
       i <- i + 1
       # in case P is odd
-      if(i == P) break
+      #if(i == P) break
     }
     
     currIter <- currIter + 1
