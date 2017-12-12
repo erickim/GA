@@ -1,0 +1,85 @@
+select {GA}                           R Documentation
+ 
+# Choose a model by a fitness function in a Genetic Algorithm
+
+## Description
+Select a formula-based model by AIC
+
+## Usage
+select(Y, X, 
+       regType = c("lm","glm"),
+       family = c("binomial", "gaussian", "Gamma", 
+       "inverse.gaussian", "poisson", "quasi", 
+       "quasibinomial", "quasipoisson"), 
+       fitness = "AIC", 
+       ranked = TRUE, 
+       selectionType = c("oneprop", twoprop", "tournament"), 
+       elitism = TRUE, 
+       crossoverType = c("single", "multiple"), 
+       numCrossover = NA, 
+       mutationRate = .01, 
+       maxIter = 100, 
+       P = 2 * ncol(X), 
+       seed = 1)
+## Arguments
+
+Y               the response vector
+
+X               the feature matrix
+
+regType         the model of an appropriate class ("lm" and "glm"). This is used as the initial model in the genetic search. The default model is 'lm'.
+
+family          the family to be passed into 'glm' or 'lm'. The family can be "binomial", "gaussian", "gamma", "inverse.gaussian", "possion", "quasi", "quasibinomial", "quasipoisson". The default family is "gaussian" family.
+
+fitness         the fitness function to describe the fitness of all chromosomes in the generation. The default fitness function is "AIC".
+
+ranked          logical; if TRUE parents are selected based on the rank of fitness values. The default is TRUE.
+
+selectionType   the type of selection mechanism ("oneprop" and "twoprop"), which describes the process by which parents are chosen to produce offspring. The default selection mechanism is "twoprop".
+
+elitism         logical; if TRUE the fittest individual to survive at each generation. The default is "TRUE".
+
+crossoverType   the type of crossover operation ("single" and "multiple"), which describe the process of generating offsprings by combing part of the genetic information from their parents. The default is "single".
+
+numCrossover    the number of splits for type "multiple". the default number is 2.
+
+mutationRate    the rate of mutation, which indicates the probability of mutating for each gene. Mutation is a genetic operation that changes an offspring chromosome by randomly introducing one or more alleles in loci. The default rate is 0.01.
+
+maxIter         the maximum number of iterations to run before the GA search is halted. The defaulte number is 100.
+
+P               the population size. 
+
+seed            an integer value containing the random number generator state. 
+
+##Details
+
+The Genetic algorithms (GAs) are stochastic search algorithms that mimic the process of Darwinian natural selection. GAs simulate the biological evolution, where breeding among highly fit organisms that ensures desirable sttributes to be passed to future generations, thereby provides a set of increasingly good candidate solutions to the optimization. 
+
+The select function enables the application of genetic algorithms to problems where the decision varibles are encoded as "binary". 
+
+Selection mechanism mimic the process by whcih parents are chosen to produce offspring. Crossover and mutation operator is used to produce offspring chromosomes from chosen parent chromosomes.
+
+Rank-based method is applied here to prevent GAs convergence to a poor local optimum. Parents are chosen based on the rank of values of negetive AIC function. Any R function, which takes as input an individual string representing a potential solution, and  returns a numerical value describing its "fitness", is allowable to perform as a fitness function.
+
+The population size is in the range of the chromosome length to two times of chromosome length. In this function. the population size is twice of chromosome length, which is the number of columns of the feature matrix, which 
+
+##Value
+
+Returns a list with 4 elements
+
+Varibles        The varibles with highest fitness value of the last generation is returned.
+
+fit             a list of 12 elements: call, cofficients, residuals, effects, rank, fitted.values, assign, qr, df.residual, xlevels, terms, model
+
+fitness         the fitness value of the best performed candidate
+
+fitnessType     the fitness function 
+
+
+##example
+Y <- rnorm(100)
+X <- as.data.frame(matrix(rnorm(100*26), nrow = 100))
+names(X) <- letters
+finalcandidate <- select(Y,X)
+summary(finalcandidates)
+finalcandidates$varibles
