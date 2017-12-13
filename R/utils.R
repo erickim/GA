@@ -214,10 +214,10 @@ selection <- function(type,
   #' 
   #' @export
   
-  assert_that(is.numeric(pop_fitness),
-              msg = 'Invalid input for population fitness value')
-  assert_that(length(pop_fitness)>1,
-              msg = 'Invalid input for population fitness value')
+  if(!is.numeric(pop_fitness) | length(pop_fitness) <= 1) {
+    message('Invalid input for population fitness value.')
+    return(NA)
+  }
   
   if (!type %in% c('oneprop', 'twoprop', 'tournament')) {
     message('Invalid selection mechanism, defaulting to `twoprop`.')
