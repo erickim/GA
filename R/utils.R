@@ -6,6 +6,8 @@
 
 library(roxygen2)
 library(docstring)
+library(assertthat)
+library(testthat)
 
 ### The following docstrings don't work with help(...) because we don't have
 ### a .Rd file yet, but it should work with ?... to access the docstrings
@@ -82,7 +84,7 @@ crossover <- function(parent1,
     }
     
     # find the places to split
-    splits <- sort(sample(N, num_splits))
+    splits <- sort(sample(N-1, num_splits))
     
     # create empty list of splits of parents
     parent1Split <- list()
@@ -151,6 +153,9 @@ selection <- function(type, pop_fitness) {
   #' @param pop_fitness A vector of fitness values for the population
   #'  
   #' @return The mutated or unmutated candidate.
+  
+  assert_that(is.numeric(pop_fitness), msg = "Invalid input for population fitness value")
+  assert_that(length(pop_fitness)>1, msg = "Invalid input for population fitness value")
   
   if (!type %in% c('oneprop', 'twoprop', 'tournament')) {
     message('Invalid selection mechanism, defaulting to `twoprop`.')
