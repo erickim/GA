@@ -110,9 +110,6 @@ select <- function(Y,
   #' 
   #' @export
   
-  # source utility functions
-  source('./R/utils.R')
-  
   # set default P if invalid
   if(!is.numeric(P)) P <- 2 * ncol(X)
   

@@ -65,7 +65,7 @@ which(swissGASelect$variables == 1)
 which(swissBestWhich[which.min(swissBestAIC),-1])
 
 
-##################### james
+##################### james test
 set.seed(1)
 n <- 500
 C <- 40

@@ -106,6 +106,8 @@ test_that("input is invalid",{
 
 ## Regression Function
 library(MASS)
+# use the Boston crime dataset to check that the regression function wrapper
+# works as it should
 boston.crim = Boston$crim
 test_that("Test if the output of regFunc is valid",{
   expect_equal(regFunc("lm",
@@ -120,7 +122,23 @@ test_that("Test if the output of regFunc is valid",{
 })
 
 # Select
+library(leaps)
+# do a best subsets selection first
+bostSubsets <- regsubsets(crim ~ ., data = Boston, nvmax = 13)
+bostSubsetsWhich <- summary(bostSubsets)$which
+bostSubsetsAIC <- c()
 
+for (i in 1:13) {
+  bostSubsetsAIC <- c(bostSubsetsAIC,
+                    AIC(glm(crim ~ .,
+                            data = Boston[c(TRUE,
+                                          bostSubsetsWhich[i,-1])])))
+}
 
+bostGA <- select(Boston$crim, Boston[,-1], regType = "lm")
+min(bostSubsetsAIC)
 
-
+test_that("`select` comes close to the best subset selection", {
+  expect_equal(-1*bostGA$fitness, min(bostSubsetsAIC),
+               tolerance = min(bostSubsetsAIC/1e5))
+})
