@@ -1,5 +1,9 @@
 ## Utils Cross over. assertion function under select.R
 
+library(testthat)
+library(GA)
+
+test_check("GA")
 ## Select While loop if(i == p) break; 
 # Flow Chart
 # initialized: generate first generation. 
