@@ -14,9 +14,9 @@
 ## Unit Test Case:
 
 ## Initialize
-Y<-mtcars$mpg
-X<-mtcars[2:11]
-P=2 * ncol(X)
+Y <- mtcars$mpg
+X <- mtcars[2:11]
+P = 2 * ncol(X)
 regType = 'lm'
 family = 'gaussian'
 seed = 1

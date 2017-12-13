@@ -9,19 +9,21 @@ library(docstring)
 library(assertthat)
 library(testthat)
 
-### The following docstrings don't work with help(...) because we don't have
-### a .Rd file yet, but it should work with ?... to access the docstrings
-### from the global environment.
-
-initialize <- function(Y, X, P, regType, family, seed) {
+initialize <- function(Y,
+                       X,
+                       P,
+                       regType = 'lm',
+                       family = 'gaussian',
+                       seed = 1) {
   #' Genetic Algorithms Initial Population Creation
+  #' 
+  #' @description Creates the initial population.
   #'
-  #' Arguments:
   #' @param Y The response vector as passed into select.
   #' @param X The feature matrix as passed into select.
   #' @param P The size of the population as passed or determined in select.
-  #' @param regType The type of regression, either "lm" or "glm".
-  #' @param family The family for "glm".
+  #' @param regType The type of regression, either 'lm' or 'glm'.
+  #' @param family The family for 'glm'.
   #' @param seed The seed for reproducibility.
   #'  
   #' @return A list of the P generated candidate solutions
@@ -32,6 +34,18 @@ initialize <- function(Y, X, P, regType, family, seed) {
   #' \item \code{fit}: The \code{lm} or \code{glm} object of the fit with the
   #' above variables.
   #' }
+  #' 
+  #' @examples
+  #' Y <- mtcars$mpg
+  #' X <- mtcars[2:11]
+  #' P = 2 * ncol(X)
+  #' regType = 'lm'
+  #' family = 'gaussian'
+  #' seed = 1
+  #' 
+  #' initialize(Y, X, P, regType, family, seed)
+  #' 
+  #' @export
   
   set.seed(seed)
   
@@ -49,22 +63,39 @@ initialize <- function(Y, X, P, regType, family, seed) {
 
 crossover <- function(parent1,
                       parent2,
-                      type = "single",
+                      type = 'single',
                       num_splits = NA) { 
   #' Genetic Algorithms Crossover Operation
+  #' 
+  #' @description Performs a crossover operation for the specified type and
+  #' parents.
   #'
-  #' Arguments:
   #' @param parent1 The first candidate solution (a vector of 0's and 1's).
   #' @param parent2 The second candidate solution (a vector of 0's and 1's).
-  #' @param type The type of crossover, either "single" or "multiple".
+  #' @param type The type of crossover, either 'single' or 'multiple'.
   #' @param num_splits The number of splits for type multiple.
   #' If invalid \code{num_splits} specified, then will default to 2.
   #'  
   #' @return A list of vectors of the children to return.
+  #' 
+  #' @examples
+  #' Y <- mtcars$mpg
+  #' X <- mtcars[2:11]
+  #' P = 2 * ncol(X)
+  #' regType = 'lm'
+  #' family = 'gaussian'
+  #' seed = 1
+  #' 
+  #' initPop <- initialize(Y, X, P, regType, family, seed)
+  #' crossover(initPop[[1]]$variables, initPop[[2]]$variables, "single")
+  #' crossover(initPop[[1]]$variables, initPop[[2]]$variables,
+  #' "multiple", 3)
+  #' 
+  #' @export
   
   N <- length(parent1)
   
-  if (type == "single"){
+  if (type == 'single'){
     # find where to split
     split <- sample(N, 1)
     
@@ -76,7 +107,7 @@ crossover <- function(parent1,
       child1 <- c(parent1[1:split], parent2[(split+1):N])
       child2 <- c(parent2[1:split], parent1[(split+1):N])
     }
-  } else if (type == "multiple") {
+  } else if (type == 'multiple') {
     # if invalid num_splits supplied, set default 2
     if (num_splits < 2 | is.na(num_splits)) {
       message('Invalid `num_splits` provided, defaulting to 2.')
@@ -122,15 +153,34 @@ crossover <- function(parent1,
   return(children)
 }
 
-mutate <- function(rate, offspring) {
+mutate <- function(rate,
+                   offspring) {
   #' Genetic Algorithms Mutation Operation
+  #' 
+  #' @description Performs a mutation operation for a given rate
+  #' on an offspring.
   #'
-  #' Arguments:
   #' @param rate The rate of mutation.
   #' @param offspring The candidate solution (a vector of 0's and 1's)
   #' to potentially mutate.
   #'  
   #' @return The mutated or unmutated candidate.
+  #' 
+  #' @examples
+  #' Y <- mtcars$mpg
+  #' X <- mtcars[2:11]
+  #' P = 2 * ncol(X)
+  #' regType = 'lm'
+  #' family = 'gaussian'
+  #' seed = 1
+  #' 
+  #' initPop <- initialize(Y, X, P, regType, family, seed)
+  #' crossoverSingle <- crossover(initPop[[1]]$variables,
+  #' initPop[[2]]$variables, "single")
+  #' 
+  #' mutate(rate = .05, offspring = crossoverSingle$child1
+  #' 
+  #' @export
   
   P <- length(offspring)
   
@@ -144,18 +194,30 @@ mutate <- function(rate, offspring) {
   return(offspring)
 }
 
-selection <- function(type, pop_fitness) {
+selection <- function(type,
+                      pop_fitness) {
   #' Genetic Algorithms Selection Operation
+  #' 
+  #' @description Performs a selection operation for the passed type on the
+  #' passed fitness values.
   #'
-  #' Arguments:
   #' @param type The type of selection mechanism. Either \code{'oneprop'},
   #' \code{'twoprop'}. See page 76 and 81 of G/H.
   #' @param pop_fitness A vector of fitness values for the population
   #'  
   #' @return The mutated or unmutated candidate.
+  #' 
+  #' @examples
+  #' initPopAIC <- unlist(lapply(initPop, function(x) AIC(x$fit)))
+  #' selection('oneprop', initPopAIC)
+  #' selection('twoprop', initPopAIC)
+  #' 
+  #' @export
   
-  assert_that(is.numeric(pop_fitness), msg = "Invalid input for population fitness value")
-  assert_that(length(pop_fitness)>1, msg = "Invalid input for population fitness value")
+  assert_that(is.numeric(pop_fitness),
+              msg = 'Invalid input for population fitness value')
+  assert_that(length(pop_fitness)>1,
+              msg = 'Invalid input for population fitness value')
   
   if (!type %in% c('oneprop', 'twoprop', 'tournament')) {
     message('Invalid selection mechanism, defaulting to `twoprop`.')
@@ -180,28 +242,21 @@ selection <- function(type, pop_fitness) {
   
 }
 
-selection_tournament <- function(pop_fitness, k, G) {
-  #' Genetic Algorithms Tournament Selection Operation
-  #' See Page 81 of G/H.
-  #'
-  #' Arguments:
-  #' @param pop_fitness A vector of fitness values for the population
-  #' @param k The number of subsets
-  #' @param G The proportion of offspring to be replaced by generated offspring
-  #'  
-  #' @return The mutated or unmutated candidate.
-  
-  # unimplemented
-}
-
 fitnessRanks <- function(fitness) {
   #' Genetic Algorithms Fitness Rank Operation
-  #' See Page 80 of G/H.
+  #' 
+  #' @description Takes in fitness values and ranks them. See Page 80 of G/H.
   #'
-  #' Arguments:
-  #' @param fitness
+  #' @param fitness The values of the fitness evaluated from the fitness
+  #' function.
   #'  
-  #' @return 
+  #' @return The ranked fitnesses.
+  #' 
+  #' @examples
+  #' initPopAIC <- sapply(initPop, function(x) AIC(x$fit))
+  #' fitnessRanks(initPopAIC)
+  #' 
+  #' @export
   
   P <- length(fitness)
   fitnessRanks <- rank(fitness)
@@ -211,25 +266,45 @@ fitnessRanks <- function(fitness) {
   return(newFitness)
 }
 
-regFunc <- function(regType, family, formula, data) {
-  if (!regType %in% c("lm", "glm")) {
-    message("Invalid `regType` defaulting to `lm`.")
-    regType = "lm"
+regFunc <- function(regType,
+                    family,
+                    formula,
+                    data) {
+  #' Genetic Algorithms Regression Operation
+  #' 
+  #' @description Allows for 'lm' or 'glm' to be passed in along with the
+  #' formula and data and performs the regression.
+  #' 
+  #' @param regType The type of regression, either 'lm' or 'glm'.
+  #' @param family The family type for 'glm'.
+  #' @param formula The formula to evaluate.
+  #' @param data The data to evaluate the regression with.
+  #' 
+  #' @return The regression object.
+  #' 
+  #' @examples
+  #' regFunc('glm', 'gaussian', mpg ~ cyl, data = mtcars)
+  #' 
+  #' @export
+  
+  if (!regType %in% c('lm', 'glm')) {
+    message('Invalid `regType` defaulting to `lm`.')
+    regType = 'lm'
   }
   
-  if (!family %in% c("binomial", "gaussian", "Gamma",
-                     "inverse.gaussian", "poisson", "quasi",
-                     "quasibinomial", "quasipoisson")) {
-    message("Invalid `family` defaulting to `gaussian`.")
+  if (!family %in% c('binomial', 'gaussian', 'Gamma',
+                     'inverse.gaussian', 'poisson', 'quasi',
+                     'quasibinomial', 'quasipoisson')) {
+    message('Invalid `family` defaulting to `gaussian`.')
   }
   
-  if (regType == "lm" & ncol(data) == 0) {
+  if (regType == 'lm' & ncol(data) == 0) {
     return(lm(formula))
-  } else if (regType == "lm" & ncol(data) > 0) {
+  } else if (regType == 'lm' & ncol(data) > 0) {
     return(lm(formula, data))
-  } else if (regType == "glm" & ncol(data) == 0) {
+  } else if (regType == 'glm' & ncol(data) == 0) {
     return(glm(formula, family))
-  } else if (regType == "glm" & ncol(data) > 0) {
+  } else if (regType == 'glm' & ncol(data) > 0) {
     return(glm(formula, family, data))
   }
 }

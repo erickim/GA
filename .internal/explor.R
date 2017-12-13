@@ -1,3 +1,5 @@
+# eric's tests while implementing
+
 source("./R/select.R")
 
 ### EXAMPLES: DATA GENERATION ###
@@ -63,7 +65,31 @@ which(swissGASelect$variables == 1)
 which(swissBestWhich[which.min(swissBestAIC),-1])
 
 
+##################### james
+set.seed(1)
+n <- 500
+C <- 40
+X <- as.data.frame(matrix(rnorm(n * C), nrow = n))
+beta <- c(88, 0.1, 123, 4563, 1.23, 20)
+y <- as.matrix(X[ ,1:6]) %*% beta
+colnames(X) <- c(paste("real", 1:6, sep = ""),
+                 paste("noi", 1:34, sep = ""))
 
+jamesGATest <- select(y, X, "glm", "gaussian")
+
+jamesBest <- regsubsets(y ~ ., data = X, nvmax = 40)
+jamesBestWhich <- summary(jamesBest)$which
+jamesBestAIC <- c()
+
+for (i in 1:40) {
+  jamesBestAIC <- c(jamesBestAIC,
+                    AIC(glm(y ~ .,
+                            data = X[jamesBestWhich[i,-1]])))
+}
+
+min(jamesBestAIC)
+jamesBestWhich[which.min(jamesBestAIC),]
+#####################
 
 
 ##### MODULAR EXAMPLES #####

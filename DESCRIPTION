@@ -1,0 +1,9 @@
+Package: GA
+Title: Genetic Algorithms for Regression
+Version: 0.1
+Authors@R: person("Eric", "Kim", email = "ekim339@berkeley.edu", role = c("aut", "cre"))
+Description: Performs Genetic Algorithms for regression (`lm` and `glm` only for v0.1) and returns the features selected based on the optimal fitness criteria. 
+Depends: R (>= 3.3.2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
