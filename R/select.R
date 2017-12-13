@@ -113,6 +113,9 @@ select <- function(Y,
   # source utility functions
   source('./R/utils.R')
   
+  # set default P if invalid
+  if(!is.numeric(P)) P <- 2 * ncol(X)
+  
   # create initial population
   initPop <- initialize(Y, X, P, regType, family, seed)
   

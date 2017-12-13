@@ -93,6 +93,11 @@ crossover <- function(parent1,
   #' 
   #' @export
   
+  if (length(parent1) != length(parent2)) {
+    message("Error: Invalid parents passed.")
+    return(NA)
+  }
+  
   N <- length(parent1)
   
   if (type == 'single'){
@@ -257,6 +262,11 @@ fitnessRanks <- function(fitness) {
   #' fitnessRanks(initPopAIC)
   #' 
   #' @export
+  
+  if (!is.numeric(fitness)) {
+    message("Invalid fitness.")
+    return(NA)
+  }
   
   P <- length(fitness)
   fitnessRanks <- rank(fitness)
