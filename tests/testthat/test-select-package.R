@@ -43,10 +43,10 @@ test_that("input is invalid",{
 
 ## Selection
 test_that("Test if the input of selection is valid", {
-  expect_error(selection("oneprop",  c("a","a","a","a","a")))
-  expect_error(selection("oneprop",  2))
-  expect_error(selection("twoprop", c(2,3, "w" , "w")))
-  expect_error(selection("twoprop", 2))
+  expect_equal(selection("oneprop",  c("a","a","a","a","a")), NA)
+  expect_equal(selection("oneprop",  2), NA)
+  expect_equal(selection("twoprop", c(2,3, "w" , "w")), NA)
+  expect_equal(selection("twoprop", 2), NA)
   
 })
 
