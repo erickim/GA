@@ -4,11 +4,6 @@
 #                                                                             #
 ###############################################################################
 
-library(roxygen2)
-library(docstring)
-library(assertthat)
-library(testthat)
-
 initialize <- function(Y,
                        X,
                        P,
