@@ -12,6 +12,7 @@
 ## Example: 
 
 ## Unit Test Case:
+library(testthat)
 
 ## Initialize
 Y <- mtcars$mpg
@@ -105,9 +106,9 @@ test_that("input is invalid",{
 }) 
 
 ## Regression Function
-library(MASS)
 # use the Boston crime dataset to check that the regression function wrapper
 # works as it should
+Boston <- MASS::Boston
 boston.crim = Boston$crim
 test_that("Test if the output of regFunc is valid",{
   expect_equal(regFunc("lm",

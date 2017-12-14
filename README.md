@@ -20,9 +20,8 @@ If the documentations on the help pages fail to load because of a "corruption" e
 For a basic usage of the genetic algorithm for feature selection in linear regression, run 
 
 ```{r}
-library(MASS)
-Y <- Boston[,1]
-X <- Boston[,-1]
+Y <- MASS::Boston[,1]
+X <- MASS::Boston[,-1]
 
 select(Y, X)
 ```
