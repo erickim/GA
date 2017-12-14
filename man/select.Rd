@@ -2,7 +2,7 @@
 % Please edit documentation in R/select.R
 \name{select}
 \alias{select}
-\title{Genetic Algorithms Initial Population Creation}
+\title{Genetic Algorithms for Variable Selection in Regression}
 \usage{
 select(Y, X, regType = "lm", family = "gaussian", fitness = "AIC",
   ranked = TRUE, selectionType = "twoprop", elitism = TRUE,
