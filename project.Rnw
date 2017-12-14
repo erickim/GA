@@ -24,10 +24,10 @@ library(GA)
 
 \section{\textbf{Part I: Functionality and Procedure}}
 
-The Genetic algorithms (GAs) are stochastic search algorithms that mimic the process of Darwinian natural selection. GAs simulate the biological evolution, where breeding among highly fit organisms that ensures desirable sttributes to be passed to future generations, thereby provides a set of increasingly good candidate solutions to the optimization. 
+The Genetic algorithms (GAs) are stochastic search algorithms that mimic the process of Darwinian natural selection. GAs simulate the biological evolution, where breeding among highly fit organisms that ensures desirable attributes to be passed to future generations, thereby provides a set of increasingly good candidate solutions to the optimization. 
 The select function enables the application of genetic algorithms to problems where the decision varibles are encoded as "binary".
 
-Selection mechanism mimic the process by whcih parents are chosen to produce offspring. Crossover and mutation operator is used to produce offspring chromosomes from chosen parent chromosomes.
+Selection mechanism mimic the process by which parents are chosen to produce offspring. Crossover and mutation operator is used to produce offspring chromosomes from chosen parent chromosomes.
 
 Rank-based method is applied here to prevent GAs convergence to a poor local optimum. Parents are chosen based on the rank of values of negetive AIC function. Any R function, which takes as input an individual string representing a potential solution, and  returns a numerical value describing its "fitness", is allowable to perform as a fitness function.
 
@@ -37,25 +37,29 @@ The population size is in the range of the chromosome length to two times of chr
 
 \subsection{main function}
 
-The main function will first initialized the first generation by calling initialize function, then select the individuals that serve as parent for second generation by calling selection function, then produce the second generation by corssover function; finally generate mutation on the second generation by calling mutation function. By then, the second generation is completely generated. Then we treat second generation as the parents of the third generation by looping over the whole procedure above except for initialization. The final stopping condition we choose is based on the iteration number. We want the 100th generation to be our final solution. Here is a plot about iteration numbers and minimal AIC. 
+The main function select() will initialize the first generation by calling initialize(), then select the individuals that serve as parents for the second generation by calling selection(). Then the parents produce the two individuals of the second generation by calling corssover() and finally generate mutation on the offsprings by calling mutate(). By then, the second generation is completely generated. Then we do iteration over the whole procedure above except for the initialization, because we treat the offsprings as the parents of the next generation. The final stopping condition we choose is based on the iteration number.Here we want the 100th generation to be our final solution.
 
-parameter: Y ,dependent variable. Input should be a numeric vector
+Following is a graph demonstrating how this select function works. 
+
+\includegraphics[width=3.5in]{plot2.jpg}
+
+parameter: Y ,dependent variable vector. Input should be a numeric vector
 
            X ,covariate matrix. Input should be a numeric data frame or matrix
            
-           regType ,the type of regression, default is lm. 
+           regType ,the type of regression, default is "lm". Input should be "lm" and "glm" 
            
-           family ,the family of the glm, default is gaussion
+           family ,the family of the glm, default is "gaussion". Input can be "binomial", "poisson",
            
-           fitness ,the criteria to evaluate the fitness of the model, default is AIC
+           "Gamma","quasi", etc.
+           
+           fitness ,the method to evaluate the fitness of the model, default is AIC.
            
            rank ,indicates if we use rank as a selection criteria, default is TRUE. Input should 
            
            be logical
            
-           selectionType as the selection criteria, default is two prop. This variable will be used 
-           
-           selection function.
+           selectionType, the selection criteria, default is "twoprop".
            
            elitism, indicates if there is a generation gap, default is TRUE. Iuput should be logical.
            
@@ -77,7 +81,7 @@ parameter: Y ,dependent variable. Input should be a numeric vector
            
            the number of covariates. Input should be integer. 
            
-output: The individual with best fitness among the final generation. We construct this object with four fields: variable, the 0-1 vectors which indicates which features to choose; fit, the model associated with this individual; fitness, the fitness value of this model; type, what kind of fitness criteria is being used. 
+output: The individual with best fitness among the final generation. We constructed this object with four fields: variable, a 0-1 vector that indicates which features to choose; fit, the model associated with this individual; fitness, the fitness value of this model; type, what kind of fitness criteria is being used. 
          
            
            
@@ -85,14 +89,14 @@ output: The individual with best fitness among the final generation. We construc
 
 \subsubsection{initialize}
 
-Funcion "initialize" is used to create P initial parents for Genetic Algorithms. In this function, we created 0-1 vectors to indicate which variables are selected for each parent.\par
+Funcion initialize() is used to create P initial parents for Genetic Algorithms. In this function, we created 0-1 vectors to indicate which variables are selected for each parent.\par
 
 Input: Y (a vector), X (a matrix), P (2* ncol(X)), regType, family and seed. \par
 
 Output: A list with two fields : variables (parent gene, a 0-1 vector indicating which variables are selected) and fit (fitting information of a parent gene).\par
 
 \subsubsection{selection}
-Function "selection" is used to select parents from current generation that can produce offsprings. In this function, we provide two different methods of selection based on the probability of being chosen as a parent. The probability are calculated as the finess of the individuals devided by the sum of fitness value of the whole population. "Oneprob" method randomly selects one parent based on the fitness probability, and selects second parent randomly at an equal chance from the remaining population.  "twoprob" method generates a pair of parents randomly based on the fitness probability. 
+Function selection() is used to select parents from current generation so that they can produce offsprings. In this function, we provide two different methods of selection based on the probability of being chosen as a parent. The probability are calculated as the finess of the individuals devided by the sum of fitness value of the whole population. "Oneprob" method randomly selects one parent based on the fitness probability, and selects second parent randomly at an equal chance from the remaining population.  "twoprob" method generates a pair of parents randomly based on the fitness probability. 
 
 Input: type; type of selection. arguments can be "oneprob" or "twoprob" only.
 
@@ -103,7 +107,7 @@ Input: type; type of selection. arguments can be "oneprob" or "twoprob" only.
 output: return one pair of parents that will produce two offsprings later.
 
 \subsubsection{crossover}
-Function "corssover" describe the simplified procedure of producing offsprings. It swap the segments of parents' chromosomes to generate two new children. We can have one cutting points, which means one chromosome is divided into two segments. We can also have multiple cutting points, which means one chromosomes is divided into more than two segments. 
+Function "corssover" describes the simplified procedure of producing offsprings. It swaps the segments of parents' chromosomes to generate two new children. We can have one cutting points, which means one chromosome is divided into two segments. We can also have multiple cutting points, which means one chromosomes is divided into more than two segments. 
 
 Input: parent1 and parent2: numeric vectors of 0s and 1s, which represent two parents. 
 
