@@ -19,7 +19,7 @@ select <- function(Y,
                    P = 2 * ncol(X), 
                    seed = 1,
                    VERBOSE = FALSE) {
-  #' Genetic Algorithms Initial Population Creation
+  #' Genetic Algorithms for Variable Selection in Regression
   #'
   #' @description Performs the genetic algorithm for regression with the 
   #' specified arguments and fitness function to return the optimal
