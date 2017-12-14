@@ -77,7 +77,7 @@ select <- function(Y,
   #' of elitism (gives an idea for convergence).
   #' }
   #' 
-  #' @details The Genetic algorithms (GAs) are stochastic search
+  #' @details The Genetic Algorithms (GAs) are stochastic search
   #' algorithms that mimic the process of Darwinian natural selection.
   #' GAs simulate the biological evolution, where breeding among highly fit
   #' organisms ensures desirable attributes be passed to future
@@ -87,19 +87,20 @@ select <- function(Y,
   #' The select function enables the application of genetic algorithms to
   #' problems where the decision variables are encoded as "binary".
   #'  
-  #' Selection mechanism mimic the process by which parents are
+  #' Selection mechanism mimics the process by which parents are
   #' chosen to produce offspring. Crossover and mutation operations are
   #' used to produce offspring chromosomes from chosen parent chromosomes.
   #' 
   #' Rank-based method is applied here to prevent GAs convergence to
-  #' a poor local optimum. Parents are chosen based on the rank of values
+  #' a poor local optimum, and parents are chosen based on the rank of values
   #' of negative AIC function. Any R function, which takes as input an
   #' individual string representing a potential solution, that returns
   #' a numerical value describing its "fitness" is allowable to perform as
   #' a fitness function.
   #' 
   #' The population size is in the range of the
-  #' chromosome length to two times of chromosome length. In this function,
+  #' chromosome length to two times of chromosome length, though this can be 
+  #' overridden by the user. In this function, the default for
   #' the population size is twice of chromosome length, which is the number
   #' of columns of the feature matrix.
   #' 
