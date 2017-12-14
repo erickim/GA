@@ -86,27 +86,28 @@ solution to the regression problem.
 The Genetic algorithms (GAs) are stochastic search
 algorithms that mimic the process of Darwinian natural selection.
 GAs simulate the biological evolution, where breeding among highly fit
-organisms that ensures desirable sttributes to be passed to future
-generations, thereby provides a set of increasingly good candidate
+organisms ensures desirable attributes be passed to future
+generations, thereby providing a set of increasingly good candidate
 solutions to the optimization. 
 
 The select function enables the application of genetic algorithms to
-problems where the decision varibles are encoded as "binary". 
-Selection mechanism mimic the process by whcih parents are
-chosen to produce offspring. Crossover and mutation operator is
+problems where the decision variables are encoded as "binary".
+ 
+Selection mechanism mimic the process by which parents are
+chosen to produce offspring. Crossover and mutation operations are
 used to produce offspring chromosomes from chosen parent chromosomes.
 
 Rank-based method is applied here to prevent GAs convergence to
 a poor local optimum. Parents are chosen based on the rank of values
-of negetive AIC function. Any R function, which takes as input an
-individual string representing a potential solution, and returns
-a numerical value describing its "fitness", is allowable to perform as
+of negative AIC function. Any R function, which takes as input an
+individual string representing a potential solution, that returns
+a numerical value describing its "fitness" is allowable to perform as
 a fitness function.
 
 The population size is in the range of the
 chromosome length to two times of chromosome length. In this function,
 the population size is twice of chromosome length, which is the number
-of columns of the feature matrix
+of columns of the feature matrix.
 }
 \examples{
 Y <- mtcars$mpg

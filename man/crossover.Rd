@@ -33,7 +33,6 @@ seed = 1
 
 initPop <- initialize(Y, X, P, regType, family, seed)
 crossover(initPop[[1]]$variables, initPop[[2]]$variables, "single")
-crossover(initPop[[1]]$variables, initPop[[2]]$variables,
-"multiple", 3)
+crossover(initPop[[1]]$variables, initPop[[2]]$variables, "multiple", 3)
 
 }

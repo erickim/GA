@@ -83,8 +83,7 @@ crossover <- function(parent1,
   #' 
   #' initPop <- initialize(Y, X, P, regType, family, seed)
   #' crossover(initPop[[1]]$variables, initPop[[2]]$variables, "single")
-  #' crossover(initPop[[1]]$variables, initPop[[2]]$variables,
-  #' "multiple", 3)
+  #' crossover(initPop[[1]]$variables, initPop[[2]]$variables, "multiple", 3)
   #' 
   #' @export
   
@@ -219,7 +218,7 @@ selection <- function(type,
     return(NA)
   }
   
-  if (!type %in% c('oneprop', 'twoprop', 'tournament')) {
+  if (!type %in% c('oneprop', 'twoprop')) {
     message('Invalid selection mechanism, defaulting to `twoprop`.')
     type <- 'twoprop'
   }

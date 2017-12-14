@@ -80,12 +80,13 @@ select <- function(Y,
   #' @details The Genetic algorithms (GAs) are stochastic search
   #' algorithms that mimic the process of Darwinian natural selection.
   #' GAs simulate the biological evolution, where breeding among highly fit
-  #' organisms that ensures desirable attributes to be passed to future
-  #' generations, thereby provides a set of increasingly good candidate
+  #' organisms ensures desirable attributes be passed to future
+  #' generations, thereby providing a set of increasingly good candidate
   #' solutions to the optimization. 
   #' 
   #' The select function enables the application of genetic algorithms to
-  #' problems where the decision variables are encoded as "binary". 
+  #' problems where the decision variables are encoded as "binary".
+  #'  
   #' Selection mechanism mimic the process by which parents are
   #' chosen to produce offspring. Crossover and mutation operations are
   #' used to produce offspring chromosomes from chosen parent chromosomes.
