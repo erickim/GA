@@ -15,6 +15,8 @@ Once you've installed the package, you can load it in via
 library(GA)
 ```
 
+If the documentations on the help pages fail to load because of a "corruption" error, please restart your R process. It should work then.
+
 For a basic usage of the genetic algorithm for feature selection in linear regression, run 
 
 ```{r}
